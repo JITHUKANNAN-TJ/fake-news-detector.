@@ -7,144 +7,96 @@ import math
 st.set_page_config(page_title="TruthLens - Fake News Detector", page_icon="🔍", layout="centered")
 
 # Custom CSS for UI mimicking the image
+# Updated CSS to match TruthLens UI exactly
 st.markdown("""
 <style>
     /* Full Page Background */
     .stApp {
-        background-color: #1a1c29;
-        font-family: 'Inter', sans-serif;
+        background: radial-gradient(circle at center, #1e2235 0%, #11131f 100%);
+        font-family: 'Inter', -apple-system, sans-serif;
     }
     
     /* Hide Streamlit components */
     header {visibility: hidden;}
     footer {visibility: hidden;}
-    .css-15zrgzn {display: none}
+    [data-testid="stHeader"] {display: none;}
 
     /* TruthLens Header Styling */
     .header-container {
         text-align: center;
-        margin-top: 3rem;
+        padding-top: 5rem;
         margin-bottom: 0.5rem;
     }
     .title-truth {
-        font-size: 3.5rem;
-        font-weight: 800;
-        color: #f8fafc;
-        letter-spacing: -1px;
+        font-size: 4rem;
+        font-weight: 700;
+        color: #ffffff;
     }
     .title-lens {
-        font-size: 3.5rem;
-        font-weight: 800;
-        background: linear-gradient(90deg, #a78bfa, #f472b6);
+        font-size: 4rem;
+        font-weight: 700;
+        background: linear-gradient(90deg, #9370DB, #da70d6);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        letter-spacing: -1px;
     }
     .subtitle {
         text-align: center;
-        color: #94a3b8;
-        font-size: 1rem;
+        color: #8a8d9b;
+        font-size: 1.1rem;
         margin-bottom: 3rem;
-        font-weight: 400;
     }
 
-    /* Chat/Form Container */
+    /* Glassmorphism Container */
     .form-box {
-        background-color: #1e2136;
-        padding: 2.5rem;
-        border-radius: 16px;
-        box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
-        border: 1px solid #2a2d45;
-        margin-bottom: 2rem;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 40px;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        max-width: 800px;
+        margin: 0 auto;
     }
 
     /* Text Area Styling */
     .stTextArea textarea {
-        background-color: #161825 !important;
-        color: #cbd5e1 !important;
-        border: 1px solid #2a2d45 !important;
+        background-color: #161826 !important;
+        color: #ffffff !important;
+        border: 1px solid #2a2d3e !important;
         border-radius: 12px !important;
-        padding: 1rem !important;
-        font-size: 1.05rem !important;
-        min-height: 180px !important;
-    }
-    .stTextArea textarea:focus {
-        border-color: #6366f1 !important;
-        box-shadow: 0 0 0 1px #6366f1 !important;
-    }
-    .stTextArea label {
-        display: none !important;
+        padding: 20px !important;
+        font-size: 1rem !important;
+        height: 200px !important;
     }
 
-    /* Analyze Button */
-    div.stButton > button {
-        background: linear-gradient(90deg, #4f46e5, #6366f1, #818cf8);
-        color: white !important;
-        border: none !important;
-        border-radius: 8px !important;
-        padding: 0.75rem 2rem !important;
-        font-weight: 600 !important;
-        font-size: 1.05rem !important;
-        box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4) !important;
-        transition: all 0.3s ease !important;
-        display: block;
-        margin-left: auto; /* Aligns button to the right */
-        margin-top: 1rem;
-    }
-    div.stButton > button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6) !important;
-        background: linear-gradient(90deg, #4338ca, #4f46e5, #6366f1);
-    }
+    /* Analyze Button Position and Style */
     div.stButton {
         display: flex;
         justify-content: flex-end;
+        margin-top: 20px;
+    }
+    div.stButton > button {
+        background: linear-gradient(90deg, #4d76f1, #6b8cf5) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 0.8rem 2.5rem !important;
+        font-weight: 600 !important;
+        transition: 0.3s !important;
+    }
+    div.stButton > button:hover {
+        opacity: 0.9;
+        transform: scale(1.02);
     }
 
-    /* Footer */
+    /* Centered Footer */
     .footer-text {
         text-align: center;
-        color: #64748b;
-        font-size: 0.85rem;
+        color: #5a5d72;
+        font-size: 0.9rem;
         margin-top: 4rem;
-        font-weight: 500;
-    }
-    
-    /* Result styling */
-    .result-real {
-        color: #4ade80;
-        font-weight: 700;
-        font-size: 1.5rem;
-        padding: 15px;
-        background-color: rgba(74, 222, 128, 0.1);
-        border-radius: 12px;
-        border: 1px solid rgba(74, 222, 128, 0.3);
-        text-align: center;
-        margin-top: 1rem;
-    }
-    .result-fake {
-        color: #f87171;
-        font-weight: 700;
-        font-size: 1.5rem;
-        padding: 15px;
-        background-color: rgba(248, 113, 113, 0.1);
-        border-radius: 12px;
-        border: 1px solid rgba(248, 113, 113, 0.3);
-        text-align: center;
-        margin-top: 1rem;
-    }
-    .stProgress .st-bo {
-        background-color: #6366f1;
+        padding-bottom: 2rem;
     }
 </style>
-""", unsafe_allow_html=True)
-
-# Main Title and Subtitle
-st.markdown("""
-<div class="header-container">
-    <span class="title-truth">Truth</span><span class="title-lens">Lens</span>
-</div>
-<div class="subtitle">Next-Generation AI Authentication Engine</div>
 """, unsafe_allow_html=True)
 
 # Load the model and vectorizer at startup
@@ -208,3 +160,4 @@ else:
 
 # Footer
 st.markdown('<div class="footer-text">Powered by LinearSVC & TF-IDF • IBM Project 2026</div>', unsafe_allow_html=True)
+
